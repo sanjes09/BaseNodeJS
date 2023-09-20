@@ -2,7 +2,7 @@ import express, { Express, Request, Response, NextFunction } from 'express';
 import morgan from 'morgan';
 import config from 'config';
 import cookieParser from 'cookie-parser';
-import routes from '../api';
+import routes from '../routes';
 import rateLimit from 'express-rate-limit';
 import mongoSanitize from 'express-mongo-sanitize';
 import path from 'path';
