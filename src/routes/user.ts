@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { getAllUsers, getCurrentUser } from '../../controllers/user';
+import { getAllUsers, getCurrentUser } from '../controllers/user';
 import { deserializeUser, isAuth, rolePermission } from '../middlewares';
 
 const router = Router();

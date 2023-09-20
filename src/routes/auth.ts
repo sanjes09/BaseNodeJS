@@ -7,7 +7,7 @@ import {
   verifyAccessTokenController,
   confirmAccountController,
   sendVerificationTokenController,
-} from '../../controllers/auth';
+} from '../controllers/auth';
 import { validate } from '../middlewares';
 import {
   registerUserSchema,
@@ -17,7 +17,7 @@ import {
   verifyAccessTokenSchema,
   confirmAccountSchema,
   sendVerificationTokenSchema,
-} from '../../schemas/user';
+} from '../schemas/user';
 
 const router = Router();
 

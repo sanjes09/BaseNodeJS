@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction} from 'express';
-import { findUserByIdService } from '../../services/user';
-import AppError from '../../utils/appError';
-import { verifyJwt } from '../../utils/jwt';
-import logger from '../../utils/pino';
+import { findUserByIdService } from '../services/user';
+import AppError from '../utils/appError';
+import { verifyJwt } from '../utils/jwt';
+import logger from '../utils/pino';
 
 export const deserializeUser = async (
   req: Request,

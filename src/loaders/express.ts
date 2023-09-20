@@ -1,18 +1,41 @@
 import express, { Express, Request, Response, NextFunction } from 'express';
 import morgan from 'morgan';
 import config from 'config';
-import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import routes from '../api';
+import rateLimit from 'express-rate-limit';
+import mongoSanitize from 'express-mongo-sanitize';
+import path from 'path';
+import helmet from 'helmet';
+import cors from "cors";
+import compression from 'compression';
 
 export default ({ app } : { app: Express }) => {
+
+  const limit = rateLimit({
+    max: 1000,// max requests
+    windowMs: 60 * 60 * 1000, // 1 Hour of 'ban' / lockout 
+    message: 'Too many requests, you are locked for 1hr' // message to send
+  });
   /**
    * Middlewares
    */
 
+  app.use(express.urlencoded({extended: true ,limit: '1mb'}))
+  app.use(express.static(path.join(__dirname,'public'), {
+    dotfiles: 'allow',
+    maxAge: 31557600000,
+    setHeaders: function(res, path) {
+      res.setHeader("Expires", new Date(Date.now() + 2592000000*30).toUTCString());
+    }
+  }));
+
   /// Body Parser
   app.use(express.json({ limit: '10kb' }));
-
+  app.use(mongoSanitize());
+  app.use(compression());
+  app.use(helmet());
+  
   /// Cookie Parser
   app.use(cookieParser());
 
@@ -21,12 +44,14 @@ export default ({ app } : { app: Express }) => {
   app.enable('trust proxy');
 
   /// Cors
+  app.use( '*', limit);
   app.use(
     cors({
       origin: config.get<string>('origin'),
       credentials: true,
     })
   );
+  app.options("*", cors());
 
   /// Load API routes
   app.use(config.get<string>('api.prefix'), routes());
@@ -51,7 +76,7 @@ export default ({ app } : { app: Express }) => {
   app.get('/status', (req, res) => {
     res.status(200).json({
       status: 'success',
-      message: 'Welcome to Plip',
+      message: 'Welcome',
     });
   });
   app.head('/status', (req, res) => {

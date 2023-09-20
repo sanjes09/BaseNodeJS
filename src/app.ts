@@ -21,6 +21,7 @@ async function startServer() {
     `);
   }).on('error', err => {
     logger.error("ERROR: Error when try to init the server");
+    console.log('err', err)
     process.exit(1);
   });
 };
